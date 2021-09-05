@@ -65,3 +65,4 @@ func main(){
 }	
 	
 	//does WithInsecure() contradict WithPerRPCCredentials()? and does oauth dialing fail because the server is not using it?
+	//need to figure out TLS credentials that match with the server
