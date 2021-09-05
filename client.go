@@ -2,14 +2,14 @@ package main
 
 import(
 	_ "context"
-//	"flag"
+	"crypto/tls"
 	"fmt"
 	_ "log"
 	"bytes"
 	"encoding/json"
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc"
-	_"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/oauth"
 	_ "google.golang.org/grpc/examples/data"
 	_ "google.golang.org/grpc/examples/features/proto/echo"
@@ -50,11 +50,13 @@ func fetchToken() *oauth2.Token {
 
 func main(){
 
-	//fmt.Println(post_to_api()["accessToken"].(string))
 	rpccred := oauth.NewOauthAccess(fetchToken())
+	creds := credentials.NewTLS(&tls.Config{
+			InsecureSkipVerify: true,
+		})
+	transportSecurity := grpc.WithTransportCredentials(creds)
 		
-	conn, connerror := grpc.Dial("https://api.coredge.ai/defender_test_tenant_2/api/login", grpc.WithTransportCredentials(rpccred), grpc.WithPerRPCCredentials(credentials)) //there needs to be an auth server url
-	//conn, connerror := grpc.Dial("https://api.coredge.ai/defender_test_tenant_2/api/login", grpc.WithInsecure())
+	conn, connerror := grpc.Dial("data.coredge.ai:443", transportSecurity, grpc.WithPerRPCCredentials(rpccred))
 	if(connerror!= nil){
 		fmt.Println("this is an error ")
 		fmt.Print("%d", connerror)
@@ -63,6 +65,3 @@ func main(){
 	}
 	defer conn.Close()	
 }	
-	
-	//does WithInsecure() contradict WithPerRPCCredentials()? and does oauth dialing fail because the server is not using it?
-	//need to figure out TLS credentials that match with the server
