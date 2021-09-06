@@ -41,7 +41,7 @@ func fetchToken() *oauth2.Token {
 	if(access_token != "nil"){
 		fmt.Println("there is a token")
 		return &oauth2.Token{
-			AccessToken: access_token,
+			AccessToken: "0",
 		}
 	} else{
 		return nil	
@@ -61,7 +61,7 @@ func main(){
 		fmt.Println("this is an error ")
 		fmt.Print("%d", connerror)
 	} else {		
-		fmt.Println(conn)
+		fmt.Printf("%+v", conn)
 	}
 	defer conn.Close()	
 }	
