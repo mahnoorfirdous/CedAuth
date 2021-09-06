@@ -41,7 +41,7 @@ func fetchToken() *oauth2.Token {
 	if(access_token != "nil"){
 		fmt.Println("there is a token")
 		return &oauth2.Token{
-			AccessToken: "0",
+			AccessToken: access_token,
 		}
 	} else{
 		return nil	
